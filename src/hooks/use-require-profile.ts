@@ -2,14 +2,14 @@ import { useUserProfile } from "@/contexts/user-profile";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function Page() {
+export const useRequireProfile = (fallback: string) => {
   const router = useRouter();
   const { profile, ready } = useUserProfile();
 
   useEffect(() => {
     if (!ready) return;
-    router.replace(profile ? "/information" : "/blocker");
-  }, [ready, profile, router]);
+    if (!profile) router.replace(fallback);
+  }, [ready, profile, router, fallback]);
 
-  return null;
-}
+  return { profile, ready };
+};
